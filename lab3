@@ -1,0 +1,172 @@
+Experiments for the Lab 3:
+We will learn the program to calculate the central tendency of dataset. 
+Central tendencies : Mean, median mode. 
+First of all, we will calculate the central tendency, covariance and correlation for an array and matrix. Then we will calculate the same for the data set. 
+We are using titanic data set. 
+
+1.	Find the central tendency for the array using numpy library. User should declare the array.
+
+import numpy as np
+
+arr = np.array([34, 76, 12, 58, 93])
+
+# calculate mean of array
+mean = np.mean(arr)
+print("Mean : ", mean)          # Output: 
+
+# Calculate median 
+median = np.median(arr)
+print("Median : ", median)
+
+values, counts = np.unique(arr, return_counts=True)
+mode_index = np.argmax(counts)
+mode_value = values[mode_index]
+
+# Print the result
+print(f"Mode: {mode_value}")
+
+# Or using scipy library 
+from scipy import stats
+
+# Calculate mode
+mode_value = stats.mode(arr)
+
+print("Mode : ",mode_value)
+2.	Find the covariance and correlation for a 3X3 matrix using numpy library. User can define and declare the matrix. 
+import numpy as np
+
+# Example 3x3 matrix
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Calculate covariance matrix
+cov_matrix = np.cov(matrix, rowvar=False)
+
+# Print the covariance matrix
+print("Covariance Matrix:")
+print(cov_matrix)
+
+# Calculate correlation matrix
+corr_matrix = np.corrcoef(matrix, rowvar=False)
+
+# Print the correlation matrix
+print("\nCorrelation Matrix:")
+print(corr_matrix)
+
+# Generate a random 3x3 matrix with integer values between 10 and 99
+random_matrix_int = np.random.randint(10, 99, size=(3, 3))
+
+# Print the random integer matrix
+print("Random 3x3 Matrix with Integers:")
+print(random_matrix_int)
+
+# Calculate covariance of random matrix
+cov_r_mtx = np.cov(random_matrix_int, rowvar=False)
+
+#Print the covariance of random matrix
+print("\n  covariance of random matrix : ")
+print(cov_r_mtx)
+
+# Calculate correlation of random matrix
+corr_r_mtx = np.corrcoef(cov_r_mtx, rowvar = False)
+print("\n Correlation of random matrix :")
+print(corr_r_mtx)
+
+3.	From the titanic dataset, calculate the central tendency values for the “Age” attribute. Age attributes contain numerical values. Therefore, it will be easier to calculate. 
+Find the covariance and correlation between “Age” and “Survived” attributes. 
+Find the covariance and correlation between “Pclass” and “Fare” attributes. 
+
+Use pandas library. 
+import pandas as pd
+
+# Reading data from a CSV file into a DataFrame
+df = pd.read_csv('titanic.csv')
+
+# Display the first few rows of the DataFrame
+print(df.head())
+
+# Show all attributes 
+all_attr = dir(df)
+# print(all_attr)
+
+
+# print all the columns header name
+col_header = df.columns
+print(col_header)
+
+# print column attribute name as list
+col_header_list = df.columns.tolist()
+print("col_header_list  : ",col_header_list)
+
+# print age header
+print("age hader : \n", df['Age'].head())
+
+# Average of age
+mean_age = df['Age'].mean()
+print("Mean age : ", mean_age)
+
+# Mode of age
+mode_age = df['Age'].mode()
+print("Mode of age :", mode_age)        # if the data has multiple modes than it will show them all 
+                                        # Here only one mode present
+
+# Median of age
+median_age = df['Age'].median()
+print("Median of age : ", median_age)
+
+
+# Covariance between Age and Survived
+covariance_Age_Survived = df['Age'].cov(df['Survived'])
+print("Covariance : ", covariance_Age_Survived)         # Output: Covariance :  -0.5512
+# The -ve covariance suggests that variable increases, the other variable tends to decrease
+
+# Covariance between Pclass and Fare
+covariance_Pclass_Fare = df['Pclass'].cov(df['Fare'])
+print("Covariance between Pclass and Fare : ", covariance_Pclass_Fare)  
+# Output: Covariance between Pclass and Fare :  -22.830196170065197
+# As the class increases the fare decreases
+
+
+# Correlation between Age and Survived
+correlation_Age_Survived = df['Age'].corr(df['Survived'])
+print("Correlation : ", correlation_Age_Survived)         # Output: Correlation :  -0.07722109457217763
+# The -ve Correlation suggests that variable increases, the other variable tends to decrease
+
+# Correlation between Pclass and Fare
+correlation_Pclass_Fare = df['Pclass'].corr(df['Fare'])
+print("Correlationbetween Pclass and Fare : ", correlation_Pclass_Fare)  
+# Output: Correlationbetween Pclass and Fare :  -0.5494996199439072
+# As the class increases the fare decreases
+
+4.	From the titanic dataset select three attributes i.e. “Age”, “Fare”, and “Pclass”. Then drop rows with missing values in selected attributes. Then using pandas library calculate covariance and correlation between the attributes. 
+import pandas as pd
+
+# read titanic data set using pandas
+df = pd.read_csv('titanic.csv')
+
+
+# select Age, Fare and Pclass attributes from the dataset
+ageFarePclass = df.loc[:,['Age', 'Fare', 'Pclass']]
+
+# print head information of ageFarePclass
+print(ageFarePclass.head())
+
+# Print all information of ageFarePclass
+print(ageFarePclass)
+
+# Drop rows with missing values in selected columns
+ageFarePclass_cleaned = ageFarePclass.dropna()
+
+# print ageFarePclass_cleaned
+print(ageFarePclass_cleaned)
+
+covariance_matrix = ageFarePclass_cleaned.cov()
+
+print("covariance matrix : ", covariance_matrix)
+
+correlation_mtx = ageFarePclass_cleaned.corr()
+print(correlation_mtx)
+
