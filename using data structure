@@ -1,0 +1,207 @@
+Lab 1: To implement data structures and different operators Python. 
+The objective is to make familiar with the Data types: Arrays, Lists, Vectors, Matrices, Factors, Data Frames in python. 
+Program 1: Write a program to create an array of integers access elements and modify them. Then add and remove elements from the array using append()  an element at the end of array and remove()  the first occurrence of specified element. 
+# Simple array implementation using a Python list
+Simple array implementation using a Python list
+
+# Creating an array (list)
+my_array = [10, 20, 30, 40, 50]
+
+# Accessing elements of the array
+print("Element at index 0:", my_array[0])  # Output: 10
+print("Element at index 3:", my_array[3])  # Output: 40
+
+# Modifying elements of the array
+my_array[2] = 35
+print("Modified array:", my_array)  # Output: [10, 20, 35, 40, 50]
+
+# Adding an element to the end of the array
+my_array.append(60)
+print("Array after appending 60:", my_array)  # Output: [10, 20, 35, 40, 50, 60]
+
+# Removing an element from the array
+my_array.remove(20)
+print("Array after removing 20:", my_array)  # Output: [10, 35, 40, 50, 60]
+
+# Iterating over the array
+print("Iterating over the array:")
+for element in my_array:
+    print(element)
+
+Program 2: Write a program to create a list of fruits, then access and modify the list by their index. Using append() and insert() add elements to the list and using remove() and pop() remove elements from the list. Then print elements using for loop. 
+
+# Creating a list
+fruits = ["apple", "banana", "cherry", "date"]
+
+# Accessing elements of the list
+print("First fruit:", fruits[0])   # Output: apple
+print("Third fruit:", fruits[2])   # Output: cherry
+
+# Modifying elements of the list
+fruits[1] = "blueberry"
+print("Modified list:", fruits)    # Output: ['apple', 'blueberry', 'cherry', 'date']
+
+# Adding elements to the list
+fruits.append("elderberry")
+print("List after appending elderberry:", fruits)  # Output: ['apple', 'blueberry', 'cherry', 'date', 'elderberry']
+
+# Inserting an element at a specific position
+fruits.insert(2, "fig")
+print("List after inserting fig at index 2:", fruits)  # Output: ['apple', 'blueberry', 'fig', 'cherry', 'date', 'elderberry']
+
+# Removing an element from the list
+fruits.remove("date")
+print("List after removing date:", fruits)  # Output: ['apple', 'blueberry', 'fig', 'cherry', 'elderberry']
+
+# Popping an element from the list (removes and returns the last item by default)
+last_fruit = fruits.pop()
+print("Popped fruit:", last_fruit)  # Output: elderberry
+print("List after popping:", fruits)  # Output: ['apple', 'blueberry', 'fig', 'cherry']
+
+# Iterating over the list
+print("Iterating over the list of fruits:")
+for fruit in fruits:
+    print(fruit)
+
+Program 3: Show the implementation of Vector in python. (using list and numpy library) 
+In Python, a vector is typically used to represent a one-dimensional array or list of numbers, and it's often associated with mathematical or computational concepts such as physics, machine learning, and linear algebra.
+# Simple vector implementation using a list
+
+# Creating a vector (as a list)
+vector_a = [1, 2, 3]
+vector_b = [4, 5, 6]
+
+# Adding two vectors
+vector_sum = [vector_a[i] + vector_b[i] for i in range(len(vector_a))]
+print("Sum of vectors:", vector_sum)  # Output: [5, 7, 9]
+
+# Subtracting two vectors
+vector_diff = [vector_a[i] - vector_b[i] for i in range(len(vector_a))]
+print("Difference of vectors:", vector_diff)  # Output: [-3, -3, -3]
+
+# Dot product of two vectors
+dot_product = sum(vector_a[i] * vector_b[i] for i in range(len(vector_a)))
+print("Dot product of vectors:", dot_product)  # Output: 32
+
+
+# Creating vectors using numpy
+
+import numpy as np
+
+
+vector_a = np.array([1, 2, 3])
+vector_b = np.array([4, 5, 6])
+
+# Adding two vectors
+vector_sum = vector_a + vector_b
+print("Sum of vectors:", vector_sum)  # Output: [5 7 9]
+
+# Subtracting two vectors
+vector_diff = vector_a - vector_b
+print("Difference of vectors:", vector_diff)  # Output: [-3 -3 -3]
+
+# Dot product of two vectors
+dot_product = np.dot(vector_a, vector_b)
+print("Dot product of vectors:", dot_product)  # Output: 32
+
+# Magnitude of a vector
+magnitude_a = np.linalg.norm(vector_a)
+print("Magnitude of vector_a:", magnitude_a)  # Output: 3.7416573867739413
+
+Program 4: Show matrix implementation in python 
+In Python, a matrix is a two-dimensional array or list of numbers, where the data is organized in rows and columns. 
+
+import numpy as np
+
+# Creating a matrix using numpy
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+])
+
+# Accessing an element (row 2, column 3)
+element = matrix[1, 2]  # Output: 6
+print("Element at row 2, column 3:", element)
+
+# Matrix addition
+matrix_b = np.array([
+    [9, 8, 7],
+    [6, 5, 4],
+    [3, 2, 1]
+])
+
+matrix_sum = matrix + matrix_b
+print("Sum of matrices:\n", matrix_sum)
+
+# Matrix multiplication (dot product)
+matrix_product = np.dot(matrix, matrix_b)
+print("Product of matrices:\n", matrix_product)
+
+# Transposing a matrix
+matrix_transpose = np.transpose(matrix)
+print("Transpose of the matrix:\n", matrix_transpose)
+
+
+Program 5: Create a program to use of data frame in python
+
+In Python, a DataFrame is a two-dimensional, size-mutable, and heterogeneous tabular data structure with labeled axes (rows and columns). It is one of the most important data structures provided by the pandas library, which is widely used for data manipulation and analysis.
+Key Features of a DataFrame:
+1.	Tabular Structure: Similar to a table in a relational database or an Excel spreadsheet, where data is organized into rows and columns.
+2.	Labeled Axes: Rows and columns have labels (index for rows, column names for columns), making it easier to access and manipulate data.
+3.	Heterogeneous Data: Columns in a DataFrame can hold different types of data (e.g., integers, floats, strings).
+4.	Size-Mutable: You can add or remove rows and columns after creating a DataFrame.
+
+import pandas as pd
+
+# Creating a DataFrame from a dictionary
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['New York', 'Los Angeles', 'Chicago']
+}
+
+df = pd.DataFrame(data)
+
+# Display the DataFrame
+print(df)
+
+
+# import pandas as pd
+
+# Creating a DataFrame from a list of lists
+data = [
+    ['Alice', 25, 'New York'],
+    ['Bob', 30, 'Los Angeles'],
+    ['Charlie', 35, 'Chicago']
+]
+
+df = pd.DataFrame(data, columns=['Name', 'Age', 'City'])
+
+# Display the DataFrame
+print(df)
+
+print("##############################################")
+
+# import pandas as pd
+
+# Reading data from a CSV file into a DataFrame
+df = pd.read_csv('titanic.csv')
+
+# Display the first few rows of the DataFrame
+print(df.head())
+
+print(df['PassengerId'])  # Accessing the 'Name' column
+
+print(df.loc[0])  # Accessing the first row
+print(df.iloc[2])  # Accessing the first row (by position)
+
+# Filtering Data: You can filter rows based on a condition.
+
+filtered_df = df[df['Age'] > 28]  # Rows where Age is greater than 28
+print(filtered_df)
+
+# Descriptive Statistics: You can get descriptive statistics of numerical columns.
+print("#################################")
+print(df.describe())
+
