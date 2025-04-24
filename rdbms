@@ -1,0 +1,226 @@
+
+-- 📚 LIBRARY MANAGEMENT SYSTEM
+
+CREATE DATABASE LibraryDB;
+USE LibraryDB;
+
+CREATE TABLE Authors (
+    AuthorID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Country VARCHAR(50)
+);
+
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    AuthorID INT,
+    Genre VARCHAR(50),
+    PublishedYear INT,
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID)
+);
+
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR(100),
+    JoinDate DATE
+);
+
+CREATE TABLE IssuedBooks (
+    IssueID INT PRIMARY KEY,
+    BookID INT,
+    MemberID INT,
+    IssueDate DATE,
+    ReturnDate DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+INSERT INTO Authors VALUES (101, 'Paulo Coelho', 'Brazil');
+INSERT INTO Authors VALUES (102, 'Dan Brown', 'USA');
+INSERT INTO Authors VALUES (103, 'A.P.J Abdul Kalam', 'India');
+
+INSERT INTO Books VALUES (1, 'The Alchemist', 101, 'Fiction', 1993);
+INSERT INTO Books VALUES (2, 'Digital Fortress', 102, 'Thriller', 1998);
+INSERT INTO Books VALUES (3, 'Wings of Fire', 103, 'Autobiography', 1999);
+
+INSERT INTO Members VALUES (1, 'Ravi Kumar', 'ravi@gmail.com', '2022-01-10');
+INSERT INTO Members VALUES (2, 'Anjali Sharma', 'anjali@gmail.com', '2022-03-15');
+
+INSERT INTO IssuedBooks VALUES (1, 1, 1, '2023-11-01', '2023-11-15');
+INSERT INTO IssuedBooks VALUES (2, 3, 2, '2023-12-05', '2023-12-20');
+
+SELECT * FROM Books;
+UPDATE Members SET Email = 'ravi.kumar@example.com' WHERE MemberID = 1;
+SELECT MemberID, COUNT(BookID) AS TotalBooksIssued FROM IssuedBooks GROUP BY MemberID;
+SELECT B.Title, A.Name AS AuthorName, M.Name AS MemberName FROM IssuedBooks I JOIN Books B ON I.BookID = B.BookID JOIN Authors A ON B.AuthorID = A.AuthorID JOIN Members M ON I.MemberID = M.MemberID;
+-- DROP DATABASE LibraryDB;
+
+
+-- 🚆 RAILWAY MANAGEMENT SYSTEM
+
+CREATE DATABASE RailwayDB;
+USE RailwayDB;
+
+CREATE TABLE Stations (
+    StationID INT PRIMARY KEY,
+    StationName VARCHAR(100),
+    City VARCHAR(100)
+);
+
+CREATE TABLE Trains (
+    TrainID INT PRIMARY KEY,
+    TrainName VARCHAR(100),
+    SourceStationID INT,
+    DestinationStationID INT,
+    DepartureTime TIME,
+    ArrivalTime TIME,
+    FOREIGN KEY (SourceStationID) REFERENCES Stations(StationID),
+    FOREIGN KEY (DestinationStationID) REFERENCES Stations(StationID)
+);
+
+CREATE TABLE Passengers (
+    PassengerID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Age INT,
+    Gender VARCHAR(10)
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY,
+    TrainID INT,
+    PassengerID INT,
+    BookingDate DATE,
+    SeatNumber VARCHAR(10),
+    FOREIGN KEY (TrainID) REFERENCES Trains(TrainID),
+    FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+);
+
+INSERT INTO Stations VALUES (1, 'New Delhi', 'Delhi');
+INSERT INTO Stations VALUES (2, 'Howrah', 'Kolkata');
+INSERT INTO Stations VALUES (3, 'Chennai Central', 'Chennai');
+
+INSERT INTO Trains VALUES (101, 'Rajdhani Express', 1, 2, '16:00:00', '08:00:00');
+INSERT INTO Trains VALUES (102, 'Coromandel Express', 2, 3, '14:00:00', '07:30:00');
+
+INSERT INTO Passengers VALUES (1, 'Arjun Mehta', 28, 'Male');
+INSERT INTO Passengers VALUES (2, 'Priya Singh', 23, 'Female');
+
+INSERT INTO Bookings VALUES (1, 101, 1, '2024-04-20', 'A1-21');
+INSERT INTO Bookings VALUES (2, 102, 2, '2024-04-21', 'B2-13');
+
+SELECT * FROM Trains;
+UPDATE Passengers SET Age = 29 WHERE PassengerID = 1;
+SELECT TrainID, COUNT(BookingID) AS TotalBookings FROM Bookings GROUP BY TrainID;
+SELECT P.Name AS PassengerName, T.TrainName, S1.StationName AS Source, S2.StationName AS Destination FROM Bookings B JOIN Passengers P ON B.PassengerID = P.PassengerID JOIN Trains T ON B.TrainID = T.TrainID JOIN Stations S1 ON T.SourceStationID = S1.StationID JOIN Stations S2 ON T.DestinationStationID = S2.StationID;
+-- DROP DATABASE RailwayDB;
+
+
+-- ✈️ AIRPORT MANAGEMENT SYSTEM
+
+CREATE DATABASE AirportDB;
+USE AirportDB;
+
+CREATE TABLE Airports (
+    AirportID INT PRIMARY KEY,
+    AirportName VARCHAR(100),
+    City VARCHAR(100)
+);
+
+CREATE TABLE Flights (
+    FlightID INT PRIMARY KEY,
+    FlightName VARCHAR(100),
+    SourceAirportID INT,
+    DestinationAirportID INT,
+    DepartureTime TIME,
+    ArrivalTime TIME,
+    FOREIGN KEY (SourceAirportID) REFERENCES Airports(AirportID),
+    FOREIGN KEY (DestinationAirportID) REFERENCES Airports(AirportID)
+);
+
+CREATE TABLE Passengers (
+    PassengerID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Gender VARCHAR(10),
+    Nationality VARCHAR(50)
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY,
+    FlightID INT,
+    PassengerID INT,
+    BookingDate DATE,
+    SeatNumber VARCHAR(10),
+    FOREIGN KEY (FlightID) REFERENCES Flights(FlightID),
+    FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+);
+
+INSERT INTO Airports VALUES (1, 'Indira Gandhi International', 'Delhi');
+INSERT INTO Airports VALUES (2, 'Chhatrapati Shivaji Maharaj International', 'Mumbai');
+INSERT INTO Airports VALUES (3, 'Kempegowda International', 'Bangalore');
+
+INSERT INTO Flights VALUES (201, 'Air India 101', 1, 2, '10:00:00', '12:30:00');
+INSERT INTO Flights VALUES (202, 'IndiGo 202', 2, 3, '15:00:00', '17:15:00');
+
+INSERT INTO Passengers VALUES (1, 'Rahul Verma', 'Male', 'Indian');
+INSERT INTO Passengers VALUES (2, 'Sneha Rao', 'Female', 'Indian');
+
+INSERT INTO Bookings VALUES (1, 201, 1, '2024-04-22', '12A');
+INSERT INTO Bookings VALUES (2, 202, 2, '2024-04-23', '14B');
+
+SELECT * FROM Flights;
+UPDATE Passengers SET Nationality = 'Canadian' WHERE PassengerID = 1;
+SELECT FlightID, COUNT(BookingID) AS TotalBookings FROM Bookings GROUP BY FlightID;
+SELECT P.Name AS PassengerName, F.FlightName, A1.AirportName AS Source, A2.AirportName AS Destination FROM Bookings B JOIN Passengers P ON B.PassengerID = P.PassengerID JOIN Flights F ON B.FlightID = F.FlightID JOIN Airports A1 ON F.SourceAirportID = A1.AirportID JOIN Airports A2 ON F.DestinationAirportID = A2.AirportID;
+-- DROP DATABASE AirportDB;
+
+
+-- ==========================================
+-- EMPLOYEE MANAGEMENT SYSTEM
+-- ==========================================
+
+CREATE DATABASE IF NOT EXISTS EmployeeDB;
+USE EmployeeDB;
+
+-- DDL: CREATE TABLES
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY AUTO_INCREMENT,
+    DeptName VARCHAR(50)
+);
+
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY AUTO_INCREMENT,
+    EmpName VARCHAR(100),
+    Salary DECIMAL(10,2),
+    DeptID INT,
+    HireDate DATE,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DeptID)
+);
+
+-- DML: INSERT DATA
+INSERT INTO Departments (DeptName) VALUES ('HR'), ('IT'), ('Finance');
+
+INSERT INTO Employees (EmpName, Salary, DeptID, HireDate) VALUES
+('Ananya', 50000, 1, '2023-01-01'),
+('Rohan', 70000, 2, '2022-05-15');
+
+-- DML: UPDATE
+UPDATE Employees SET Salary = Salary * 1.10 WHERE DeptID = 2;
+
+-- DML: DELETE
+DELETE FROM Employees WHERE EmpName = 'Rohan';
+
+-- DQL: SELECT
+SELECT E.EmpName, D.DeptName, E.Salary
+FROM Employees E
+JOIN Departments D ON E.DeptID = D.DeptID;
+
+-- TCL: TRANSACTION
+START TRANSACTION;
+UPDATE Employees SET Salary = Salary - 1000 WHERE DeptID = 1;
+-- Accidentally wrong update
+ROLLBACK;
+
+-- DCL: Admin access
+GRANT ALL PRIVILEGES ON EmployeeDB.* TO 'admin'@'localhost' IDENTIFIED BY 'adminpass';
+
