@@ -1,0 +1,187 @@
+-- ==========================================
+-- EMPLOYEE MANAGEMENT SYSTEM
+-- ==========================================
+
+CREATE DATABASE IF NOT EXISTS EmployeeDB;
+USE EmployeeDB;
+
+-- DDL: CREATE TABLES
+CREATE TABLE Departments (
+    DeptID INT PRIMARY KEY AUTO_INCREMENT,
+    DeptName VARCHAR(50)
+);
+
+CREATE TABLE Employees (
+    EmpID INT PRIMARY KEY AUTO_INCREMENT,
+    EmpName VARCHAR(100),
+    Salary DECIMAL(10,2),
+    DeptID INT,
+    HireDate DATE,
+    FOREIGN KEY (DeptID) REFERENCES Departments(DeptID)
+);
+
+-- DML: INSERT DATA
+INSERT INTO Departments (DeptName) VALUES ('HR'), ('IT'), ('Finance');
+
+INSERT INTO Employees (EmpName, Salary, DeptID, HireDate) VALUES
+('Ananya', 50000, 1, '2023-01-01'),
+('Rohan', 70000, 2, '2022-05-15');
+
+-- DML: UPDATE
+UPDATE Employees SET Salary = Salary * 1.10 WHERE DeptID = 2;
+
+-- DML: DELETE
+DELETE FROM Employees WHERE EmpName = 'Rohan';
+
+-- DQL: SELECT
+SELECT E.EmpName, D.DeptName, E.Salary
+FROM Employees E
+JOIN Departments D ON E.DeptID = D.DeptID;
+
+-- TCL: TRANSACTION
+START TRANSACTION;
+UPDATE Employees SET Salary = Salary - 1000 WHERE DeptID = 1;
+-- Accidentally wrong update
+ROLLBACK;
+
+-- DCL: Admin access
+GRANT ALL PRIVILEGES ON EmployeeDB.* TO 'admin'@'localhost' IDENTIFIED BY 'adminpass';
+
+-- ==========================================
+-- LIBRARY MANAGEMENT SYSTEM
+-- ==========================================
+
+-- DDL: CREATE TABLES
+CREATE DATABASE IF NOT EXISTS LibraryDB;
+USE LibraryDB;
+
+-- Book table
+CREATE TABLE Books (
+    BookID INT PRIMARY KEY AUTO_INCREMENT,
+    Title VARCHAR(100),
+    Author VARCHAR(100),
+    Genre VARCHAR(50),
+    Quantity INT
+);
+
+-- Member table
+CREATE TABLE Members (
+    MemberID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Email VARCHAR(100),
+    JoinDate DATE
+);
+
+-- Issue table
+CREATE TABLE Issues (
+    IssueID INT PRIMARY KEY AUTO_INCREMENT,
+    BookID INT,
+    MemberID INT,
+    IssueDate DATE,
+    ReturnDate DATE,
+    FOREIGN KEY (BookID) REFERENCES Books(BookID),
+    FOREIGN KEY (MemberID) REFERENCES Members(MemberID)
+);
+
+-- DML: INSERT DATA
+INSERT INTO Books (Title, Author, Genre, Quantity) VALUES 
+('The Alchemist', 'Paulo Coelho', 'Fiction', 5),
+('Clean Code', 'Robert C. Martin', 'Programming', 3);
+
+INSERT INTO Members (Name, Email, JoinDate) VALUES
+('Dreesty', 'dreesty@library.com', CURDATE()),
+('Aarav Sharma', 'aarav@gmail.com', CURDATE());
+
+INSERT INTO Issues (BookID, MemberID, IssueDate, ReturnDate) VALUES
+(1, 1, CURDATE(), NULL);
+
+-- DQL: SELECT QUERY
+SELECT * FROM Books;
+SELECT * FROM Members WHERE JoinDate >= '2024-01-01';
+
+-- DDL: ALTER TABLE
+ALTER TABLE Members ADD Phone VARCHAR(15);
+
+-- DML: UPDATE & DELETE
+UPDATE Books SET Quantity = Quantity - 1 WHERE BookID = 1;
+
+DELETE FROM Members WHERE MemberID = 2;
+
+-- TCL: TRANSACTION CONTROL
+START TRANSACTION;
+UPDATE Books SET Quantity = Quantity + 1 WHERE BookID = 1;
+INSERT INTO Issues (BookID, MemberID, IssueDate, ReturnDate) VALUES (1, 1, CURDATE(), NULL);
+-- If all OK
+COMMIT;
+-- If error
+-- ROLLBACK;
+
+-- DCL: USER & PERMISSIONS
+-- GRANT access (admin only)
+GRANT SELECT, INSERT, UPDATE ON LibraryDB.* TO 'libuser'@'localhost' IDENTIFIED BY 'lib123';
+-- Revoke example
+REVOKE UPDATE ON LibraryDB.Books FROM 'libuser'@'localhost';
+
+-- ==========================================
+-- RAILWAY MANAGEMENT SYSTEM
+-- ==========================================
+
+CREATE DATABASE IF NOT EXISTS RailwayDB;
+USE RailwayDB;
+
+-- DDL: CREATE TABLES
+CREATE TABLE Trains (
+    TrainID INT PRIMARY KEY AUTO_INCREMENT,
+    TrainName VARCHAR(100),
+    Source VARCHAR(50),
+    Destination VARCHAR(50),
+    TotalSeats INT
+);
+
+CREATE TABLE Passengers (
+    PassengerID INT PRIMARY KEY AUTO_INCREMENT,
+    Name VARCHAR(100),
+    Age INT,
+    Gender CHAR(1)
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY AUTO_INCREMENT,
+    PassengerID INT,
+    TrainID INT,
+    BookingDate DATE,
+    SeatNumber INT,
+    FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID),
+    FOREIGN KEY (TrainID) REFERENCES Trains(TrainID)
+);
+
+-- DML: INSERT DATA
+INSERT INTO Trains (TrainName, Source, Destination, TotalSeats) VALUES
+('Express 101', 'Jaipur', 'Delhi', 100),
+('Express 202', 'Mumbai', 'Pune', 80);
+
+INSERT INTO Passengers (Name, Age, Gender) VALUES
+('Priya Singh', 22, 'F'),
+('Rahul Mehta', 25, 'M');
+
+-- DML: INSERT with JOIN
+INSERT INTO Bookings (PassengerID, TrainID, BookingDate, SeatNumber)
+VALUES (1, 1, CURDATE(), 12);
+
+-- DQL: SELECT with JOIN
+SELECT P.Name, T.TrainName, B.SeatNumber
+FROM Bookings B
+JOIN Passengers P ON B.PassengerID = P.PassengerID
+JOIN Trains T ON B.TrainID = T.TrainID;
+
+-- DDL: ADD new column
+ALTER TABLE Trains ADD DepartureTime TIME;
+
+-- TCL: Booking in transaction
+START TRANSACTION;
+UPDATE Trains SET TotalSeats = TotalSeats - 1 WHERE TrainID = 1;
+INSERT INTO Bookings (PassengerID, TrainID, BookingDate, SeatNumber) VALUES (2, 1, CURDATE(), 13);
+COMMIT;
+
+-- DCL: Give SELECT access to read-only user
+GRANT SELECT ON RailwayDB.* TO 'readonly'@'localhost' IDENTIFIED BY 'readonlypass';
